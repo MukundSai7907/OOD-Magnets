@@ -185,6 +185,9 @@ class SupConResNet(nn.Module):
         feat = F.normalize(self.head(feat), dim=1)
         return feat
 
+    def forward_virtual(self, x):
+       feat = self.encoder(x)
+       return feat, F.normalize(self.head(feat), dim=1)
 
 class SupCEResNet(nn.Module):
     """encoder + classifier"""

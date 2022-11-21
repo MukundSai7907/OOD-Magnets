@@ -173,7 +173,7 @@ def set_model(opt):
 
     # enable synchronized Batch Normalization
     if opt.syncBN:
-        model = apex.parallel.convert_syncbn_model(model)
+        model = torch.nn.SyncBatchNorm(model)
 
     if torch.cuda.is_available():
         if torch.cuda.device_count() > 1:
