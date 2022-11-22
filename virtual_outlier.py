@@ -105,7 +105,7 @@ if args.model == 'supcon':
         net = net.cuda()
         cudnn.benchmark = True
 else:
-    net = SupCEResNet(name=args.model_name, num_classes=args.n_cls)
+    net = SupCEResNet(name=args.model_name, num_classes=10)
     if torch.cuda.is_available():
         if torch.cuda.device_count() > 1:
             net = torch.nn.DataParallel(net)
@@ -143,11 +143,11 @@ else:
     num_classes = 100
 weight_energy = torch.nn.Linear(num_classes, 1).cuda()
 torch.nn.init.uniform_(weight_energy.weight)
-data_dict = torch.zeros(num_classes, args.sample_number, 128).cuda()
+data_dict = torch.zeros(num_classes, args.sample_number, 2048).cuda()
 number_dict = {}
 for i in range(num_classes):
     number_dict[i] = 0
-eye_matrix = torch.eye(128, device='cuda')
+eye_matrix = torch.eye(2048, device='cuda')
 logistic_regression = torch.nn.Linear(1, 2)
 logistic_regression = logistic_regression.cuda()
 optimizer = torch.optim.SGD(
@@ -202,7 +202,7 @@ def train(epoch):
         # forward
         x, output = net.forward_virtual(data)
 
-
+        #import pdb;pdb.set_trace();
         # energy regularization.
         sum_temp = 0
         for index in range(num_classes):

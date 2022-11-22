@@ -187,7 +187,7 @@ class SupConResNet(nn.Module):
 
     def forward_virtual(self, x):
        feat = self.encoder(x)
-       return feat, F.normalize(self.head(feat), dim=1)
+       return F.normalize(self.head(feat), dim=1), feat
 
 class SupCEResNet(nn.Module):
     """encoder + classifier"""
@@ -200,6 +200,9 @@ class SupCEResNet(nn.Module):
     def forward(self, x):
         return self.fc(self.encoder(x))
 
+    def forward_virtual(self,x):
+        feat = self.encoder(x)
+        return self.fc(x), feat
 
 class LinearClassifier(nn.Module):
     """Linear classifier"""
