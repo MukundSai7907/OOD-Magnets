@@ -200,10 +200,6 @@ class SupCEResNet(nn.Module):
     def forward(self, x):
         return self.fc(self.encoder(x))
 
-    def forward_virtual(self,x):
-        feat = self.encoder(x)
-        return self.fc(x), feat
-
 class LinearClassifier(nn.Module):
     """Linear classifier"""
     def __init__(self, name='resnet50', num_classes=10):

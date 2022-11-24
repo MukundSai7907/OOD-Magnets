@@ -105,11 +105,10 @@ if args.model == 'supcon':
         net = net.cuda()
         cudnn.benchmark = True
 else:
-    print("CE")
-    net = SupCEResNet(name=args.model_name, num_classes=10)
+    net = SupCEResNet(name=args.model_name, num_classes=args.n_cls)
     if torch.cuda.is_available():
-        #if torch.cuda.device_count() > 1:
-        #    net = torch.nn.DataParallel(net)
+        if torch.cuda.device_count() > 1:
+           net = torch.nn.DataParallel(net)
         net = net.cuda()
         cudnn.benchmark = True
 
@@ -199,7 +198,7 @@ def train(epoch):
     loss_avg = 0.0
     for data, target in train_loader:
         data, target = data.cuda(), target.cuda()
-        print(target)
+        
         # forward
         x, output = net.forward_virtual(data)
 
@@ -209,7 +208,6 @@ def train(epoch):
         for index in range(num_classes):
             sum_temp += number_dict[index]
         lr_reg_loss = torch.zeros(1).cuda()[0]
-        print(sum_temp, num_classes * args.sample_number)
         if sum_temp == num_classes * args.sample_number and epoch < args.start_epoch:
             # maintaining an ID data queue for each class.
             target_numpy = target.cpu().data.numpy()
