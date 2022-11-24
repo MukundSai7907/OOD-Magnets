@@ -105,10 +105,11 @@ if args.model == 'supcon':
         net = net.cuda()
         cudnn.benchmark = True
 else:
+    print("CE")
     net = SupCEResNet(name=args.model_name, num_classes=10)
     if torch.cuda.is_available():
-        if torch.cuda.device_count() > 1:
-            net = torch.nn.DataParallel(net)
+        #if torch.cuda.device_count() > 1:
+        #    net = torch.nn.DataParallel(net)
         net = net.cuda()
         cudnn.benchmark = True
 
@@ -198,7 +199,7 @@ def train(epoch):
     loss_avg = 0.0
     for data, target in train_loader:
         data, target = data.cuda(), target.cuda()
-
+        print(target)
         # forward
         x, output = net.forward_virtual(data)
 
@@ -208,14 +209,17 @@ def train(epoch):
         for index in range(num_classes):
             sum_temp += number_dict[index]
         lr_reg_loss = torch.zeros(1).cuda()[0]
+        print(sum_temp, num_classes * args.sample_number)
         if sum_temp == num_classes * args.sample_number and epoch < args.start_epoch:
             # maintaining an ID data queue for each class.
             target_numpy = target.cpu().data.numpy()
+            print("Inside ID")
             for index in range(len(target)):
                 dict_key = target_numpy[index]
                 data_dict[dict_key] = torch.cat((data_dict[dict_key][1:],
                                                       output[index].detach().view(1, -1)), 0)
         elif sum_temp == num_classes * args.sample_number and epoch >= args.start_epoch:
+            print("Inside OOD")
             target_numpy = target.cpu().data.numpy()
             for index in range(len(target)):
                 dict_key = target_numpy[index]
@@ -249,7 +253,7 @@ def train(epoch):
                     ood_samples = negative_samples[index_prob]
                 else:
                     ood_samples = torch.cat((ood_samples, negative_samples[index_prob]), 0)
-            if len(ood_samples) != 0:
+            if False and len(ood_samples) != 0:
                 # add some gaussian noise
                 # ood_samples = self.noise(ood_samples)
                 # energy_score_for_fg = 1 * torch.logsumexp(predictions[0][selected_fg_samples][:, :-1] / 1, 1)
@@ -276,6 +280,7 @@ def train(epoch):
                     data_dict[dict_key][number_dict[dict_key]] = output[index].detach()
                     number_dict[dict_key] += 1
 
+        print(number_dict)
         # backward
 
         optimizer.zero_grad()
@@ -283,13 +288,12 @@ def train(epoch):
         # breakpoint()
         loss += args.loss_weight * lr_reg_loss
         loss.backward()
-
+        
         optimizer.step()
         scheduler.step()
 
         # exponential moving average
         loss_avg = loss_avg * 0.8 + float(loss) * 0.2
-
     state['train_loss'] = loss_avg
 
 
