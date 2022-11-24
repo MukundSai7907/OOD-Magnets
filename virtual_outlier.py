@@ -251,6 +251,7 @@ def train(epoch):
                     ood_samples = negative_samples[index_prob]
                 else:
                     ood_samples = torch.cat((ood_samples, negative_samples[index_prob]), 0)
+            # @TODO Add our new loss function for OOD Here and remove False
             if False and len(ood_samples) != 0:
                 # add some gaussian noise
                 # ood_samples = self.noise(ood_samples)
