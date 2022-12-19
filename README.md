@@ -135,6 +135,25 @@ and
   <img src="figures/SimCLR.jpg" width="800">
 </p>
 
+## Testing
+
+To run the results for FPR95, AUROC and AUPR please run:
+
+```
+        python test.py --cifar_root <root path of the cifar dataset> (required)
+                       --weights_path <path to weight of the model> (required)
+                       --centroids_path <path to the centroids file> (required)
+                       --batch_size <batch size of test batches>
+                       --lsun_root <path to root directory of lsun dataset>
+                       --places365_root <path to root directory of places dataset>
+                       --isun_root <path to root directory of isun dataset>
+                       --dtd_root <path to root directory of dtd dataset>
+                       --svhn_root <path to root directory of svhn dataset>
+```
+
+For faster results it is better to run the script once per OOD dataset i.e with only one of the OOD datset path arguments at a time. 
+
+
 ## Reference
 ```
 @Article{khosla2020supervised,
