@@ -9,10 +9,10 @@ Please refer [this repository](https://github.com/HobbitLong/SupContrast) for Py
 
 **(2) Stage 2: Virtual Outlier Synthesis**  
 
-Following the paper and the repository, we generate virtual outliers. To synthesize a new set of virtual outliers, use --generate_ood while running the train script.
+Following the paper and the repository, we generate virtual outliers. To synthesize a new set of virtual outliers, use `--generate_ood` while running the train script.
 
 **(3) Stage 3: OOD Score Optimization**  
-Pretraining stage:
+
 ```
 python train_virtual.py --epochs 20
   --learning_rate 0.1
@@ -22,6 +22,13 @@ python train_virtual.py --epochs 20
   --generate_ood # to generate a new set of virtual outliers
   --generate_centroids  # find ID class centroids
 
+  
+  
+```
+**(4) Stage 4: ID Classification Head Training**  
+
+```
+python train_ID_classifier.py
   
   
 ```
