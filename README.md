@@ -60,6 +60,9 @@ python stage4_ID_classifier.py --test
 python visualize_embeddings.py
 ```
 
-Ensure we have the datasets for Textures (DTD), SVHN, iSUN, LSUN and Places 365 for testing and visualization
+Ensure we have the datasets for Textures (DTD), SVHN, iSUN, LSUN and Places 365 for testing and visualization.
+
+
+The pretrained models and PyTorch objects are present in [drive](https://drive.google.com/drive/folders/1gH1Jx1837vMx_MJQCwc2P1CWO9x2bAnP?usp=sharing).
 
 
