@@ -28,13 +28,13 @@ python train_virtual.py --epochs 20
 **(4) Stage 4: ID Classification Head Training**  
 
 ```
-python train_ID_classifier.py
-  
-  
+python stage4_ID_classifier.py --train
 ```
 
 
 ## Testing
+
+**(1) OOD Classification**
 
 To run the results for FPR95, AUROC and AUPR please run:
 
@@ -52,6 +52,13 @@ To run the results for FPR95, AUROC and AUPR please run:
 
 For faster results it is better to run the script once per OOD dataset i.e with only one of the OOD datset path arguments at a time. 
 
+**(2) ID Classification**
+To use the model as a classifier for ID data:
+```
+python stage4_ID_classifier.py --test
+```
 
 ## Visualization
+ 
+
 
