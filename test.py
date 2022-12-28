@@ -52,7 +52,6 @@ def infer(centroids_128d_file_path, net, test_loader):
               if(max_dot_product < 0):
                   neg_count += 1
                   print(max_dot_product)
-
               '''
 
               # Score for Mukund
@@ -192,7 +191,4 @@ if __name__ == '__main__':
     
     
     main(args)
-    
-    
-    
     

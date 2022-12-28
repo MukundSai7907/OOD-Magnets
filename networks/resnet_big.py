@@ -185,9 +185,6 @@ class SupConResNet(nn.Module):
         feat = F.normalize(self.head(feat), dim=1)
         return feat
 
-    def forward_virtual(self, x):
-       feat = self.encoder(x)
-       return F.normalize(self.head(feat), dim=1), feat
 
 class SupCEResNet(nn.Module):
     """encoder + classifier"""
@@ -200,6 +197,44 @@ class SupCEResNet(nn.Module):
     def forward(self, x):
         return self.fc(self.encoder(x))
 
+
+class LinearClassifier(nn.Module):
+    """Linear classifier"""
+    def __init__(self, input_dim = 128, num_classes=10):
+        super(LinearClassifier, self).__init__()
+        #_, feat_dim = model_dict[name]
+        self.fc1 = nn.Linear(input_dim, 64)
+        self.fc2 = nn.Linear(64, num_classes)
+        
+
+    def forward(self, features):
+      out = F.normalize(self.fc1(features), dim=1)
+      out = F.relu(out)
+      out = self.fc2(out)
+      return out
+    
+    def forward_64d(self, x):
+      return F.normalize(self.fc1(x), dim=1)
+
+
+class MyEnsemble(nn.Module):
+    def __init__(self, modelA, modelB):
+        super(MyEnsemble, self).__init__()
+        self.modelA = modelA
+        self.modelB = modelB
+        
+        
+    def forward(self, x):
+        x = self.modelA(x)
+        x = self.modelB(x)
+        return x
+
+    def forward_virtual(self, x):
+        features = self.modelA(x)
+        x = self.modelB(features)
+        return x, features     
+
+'''
 class LinearClassifier(nn.Module):
     """Linear classifier"""
     def __init__(self, name='resnet50', num_classes=10):
@@ -209,3 +244,4 @@ class LinearClassifier(nn.Module):
 
     def forward(self, features):
         return self.fc(features)
+'''
